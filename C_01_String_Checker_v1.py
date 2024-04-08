@@ -21,40 +21,47 @@ def string_checker(question, valid_list, error):
 
 # Main Routine...
 
-# List of valid response
+# Lists of valid responses
 yes_no_list = ["yes", "no"]
 dmge_list = ["distance", "midpoint", "gradient", "equation"]
 
-# Get user response and call string checker function
-next_calculation = string_checker("What would you like to calculate? (d / m / g / e): ", dmge_list, "Please enter "
-                                                                                                   "either distance /"
-                                                                                                   " midpoint / "
-                                                                                                   "gradient / "
-                                                                                                   "equation.")
+# Get users y / n response and call string checker function
+yes_no = string_checker("(y / n): ", yes_no_list, "Please enter yes / no.")
 
-yes_no = ("(y / n): ", yes_no_list, "Please enter yes / no.")
-
-# If user enter yes or no
-if yes_no == "yes" or "y":
+# If user enter yes
+if yes_no == "yes" or yes_no == "y":
     print("You said yes")
+    print()
 
-else:
+# If user enters no
+elif yes_no == "no" or yes_no == "n":
     print("You said no")
+    print()
 
-# Set to_solve depending on the users response
+# Get user response and call string checker function
+next_calculation = string_checker("What would you like to calculate? (d / m / g / e): ", dmge_list,
+                                  "Please enter "
+                                  "either distance /"
+                                  " midpoint / "
+                                  "gradient / "
+                                  "equation.")
+
+# If user wants distance
 if next_calculation == "distance" or next_calculation == "d":
     to_solve = "distance"
     print("Calculate distance")
 
+# If user wants midpoint
 elif next_calculation == "midpoint" or next_calculation == "m":
     to_solve = "midpoint"
     print("Calculate midpoint")
 
+# If user wants gradient
 elif next_calculation == "gradient" or next_calculation == "g":
     to_solve = "gradient"
     print("Calculate gradient")
 
+# If user wants equation
 elif next_calculation == "equation" or next_calculation == "e":
     to_solve = "equation"
     print("Calculate equation")
-
