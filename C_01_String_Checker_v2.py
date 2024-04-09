@@ -7,12 +7,12 @@ def string_checker(question, valid_list, error):
         response = input(question).lower()
 
         # Check the string is in the valid list
-        for item in valid_list:
+        for var_item in valid_list:
 
             # Check if the response matches the entire item or just the first character
             # of the item (if it's not empty)
-            if response == item or (len(item) > 0 and response == item[0]):
-                return item
+            if response == item or (len(var_item) > 0 and response == var_item[0]):
+                return var_item
 
         # If not in valid list, print error
         print(error)
@@ -42,7 +42,7 @@ for item in range(0, 6):
         print()
 
 # Loops to make testing faster...
-for item in range(0, 6):
+for item in range(0, 7):
     # Get user response and call string checker function
     next_calculation = string_checker("What would you like to calculate? (d / m / g / e): ", dmge_list,
                                       "Please enter "
@@ -76,7 +76,7 @@ for item in range(0, 6):
         print()
 
 # Loops to make testing faster...
-for item in range(0, 6):
+for item in range(0, 1):
     # Find out if the user wants to calculate things one at a time, or all at once
     initial_calculation_wanted = string_checker("What would you like to calculate? (d / m / g / e) or press <enter> for"
                                                 "ALL: ", dmgea_list,
