@@ -47,4 +47,3 @@ def ordinate_checker():
 # Get ordinate values, call ordinate checker
 x1, y1, x2, y2 = ordinate_checker()
 print(f"The coordinates are ({x1}, {y1}) and ({x2}, {y2})")
-
