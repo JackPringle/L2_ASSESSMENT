@@ -19,11 +19,13 @@ while True:
     # Ask user what name they want to assign to the question
     question_name = not_blank("Name: ")
 
-    # If they have chosen to quit, output the name they chose
+    # If they have not chosen to quit, output the name they chose
     if question_name != "xxx":
         print(f"{question_name}")
         break
 
     else:
+
+        # If they chose to quit
         print("You have chosen to quit")
         break
