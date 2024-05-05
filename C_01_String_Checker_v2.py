@@ -11,7 +11,7 @@ def string_checker(question, valid_list, error):
 
             # Check if the response matches the entire item or just the first character
             # of the item (if it's not empty)
-            if response == item or (len(var_item) > 0 and response == var_item[0]):
+            if response == var_item or (len(var_item) > 0 and response == var_item[0]):
                 return var_item
 
         # If not in valid list, print error
