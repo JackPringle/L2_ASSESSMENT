@@ -25,30 +25,29 @@ def string_checker(question, valid_list, error):
 # Lists of valid responses
 yes_no_list = ["yes", "no"]
 
+# Set values
 line_number = 0
 number_of_calculations = 0
 another_line = "yes"
 another_calculation = "yes"
-another_calculation_question = "Would you like to calculate something else? (y/n): ", yes_no_list, "Please enter " \
-                                                                                                   "either yes / no"
-
 
 while another_line == "yes":
 
-    another_calculation = string_checker("Would you like to calculate something else? (y/n): ", yes_no_list, "Please "
-                                                                                                             "enter "
-                                                                                                             "either"
-                                                                                                             "yes / no")
+    line_number += 1
 
     while another_calculation == "yes":
-        print("Work all of the calculations out here\n")
         another_calculation = string_checker("Would you like to calculate something else? (y/n): ", yes_no_list,
                                              "Please "
                                              "enter "
                                              "either"
                                              "yes / no")
+        if another_calculation == "yes":
+            print("** Calculation here **\n")
+            number_of_calculations += 1
 
     another_line = string_checker("Would you like to enter another line? (y/n): ", yes_no_list, "Please enter either "
                                                                                                 "yes / no")
+    another_calculation = "yes"
 
-print("Congrats you broke out of the loop!")
+print(f"Total number of calculations = {number_of_calculations}")
+print(f"Total number of lines = {line_number}")
