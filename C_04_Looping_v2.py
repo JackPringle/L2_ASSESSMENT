@@ -33,7 +33,7 @@ another_problem = "yes"
 number_of_calculations = 0
 another_calculation = "yes"
 
-to_solve = "d"
+to_solve = "all"
 
 # Keep looping until user does not want another problem
 while another_problem == "yes" and to_solve != "all":
@@ -62,29 +62,36 @@ while another_problem == "yes" and to_solve != "all":
                                      "yes / no")
     another_calculation = "yes"
 
-if to_solve == "all":
+while another_problem == "yes" and to_solve == "all":
 
     problem_number += 1
 
     print("**** ALL MODE ****\n")
-    input("Press any key to continue: ")
+    input("Press <enter> to continue: ")
     print()
     number_of_calculations += 1
     print("** distance calculation here **\n")
-    input("Press any key to continue: ")
+    input("Press <enter> to continue: ")
     print()
     number_of_calculations += 1
     print("** midpoint calculation here **\n")
-    input("Press any key to continue: ")
+    input("Press <enter> to continue: ")
     print()
     number_of_calculations += 1
     print("** gradient calculation here **\n")
-    input("Press any key to continue: ")
+    input("Press <enter> to continue: ")
     print()
     number_of_calculations += 1
     print("** Line equation calculation here **\n")
     print()
     print("END")
+    print()
+
+    # Ask if they want to solve another problem
+    another_problem = string_checker("Would you like to solve a different problem / line? (y/n): ", yes_no_list,
+                                     "Please enter either "
+                                     "yes / no")
+    another_calculation = "yes"
 
 # Output the tally of calculations and problems
 print()
