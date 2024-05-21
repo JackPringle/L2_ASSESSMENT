@@ -42,6 +42,8 @@ while another_problem == "yes":
 
     problem_number += 1
     number_of_calculations = 0
+    another_calculation = "yes"
+    to_solve_list = []
 
     while another_calculation == "yes":
 
@@ -60,7 +62,8 @@ while another_problem == "yes":
                 to_solve = "all"
 
             else:
-                next_calculation = initial_calculation_wanted
+                to_solve_list.append(initial_calculation_wanted)
+                to_solve = "one by one"
 
             break
 
@@ -68,8 +71,15 @@ while another_problem == "yes":
 
         # Ask user what calculation they want, and print working
         if another_calculation == "yes":
-            number_of_calculations += 1
 
+            # Loop headings in order for each calculation to solve
+            for item in to_solve_list:
+                number_of_calculations += 1
+
+                print()
+                print(f"** {item} calculation here **\n")
+
+            # Ask what they want to calculate next
             next_calculation = string_checker("What would you like to calculate? (d / m / g / e): ", dmge_list,
                                               "Please enter "
                                               "either distance /"
@@ -108,7 +118,6 @@ while another_problem == "yes":
     another_problem = string_checker("Would you like to solve a different problem / line? (y/n): ", yes_no_list,
                                      "Please enter either "
                                      "yes / no")
-    another_calculation = "yes"
 
     TOTAL_calculations += number_of_calculations
 
