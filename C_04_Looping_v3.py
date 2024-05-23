@@ -33,8 +33,6 @@ another_problem = "yes"
 
 # Set calculations values
 TOTAL_calculations = 0
-another_calculation = "yes"
-
 to_solve = None
 
 # Keep looping until user does not want another problem
@@ -45,7 +43,7 @@ while another_problem == "yes":
     another_calculation = "yes"
     to_solve_list = []
 
-    while another_calculation == "yes":
+    if another_calculation == "yes":
 
         if number_of_calculations == 0:
 
@@ -65,12 +63,10 @@ while another_problem == "yes":
                 to_solve_list.append(initial_calculation_wanted)
                 to_solve = "one by one"
 
-            break
-
     if to_solve != "all":
 
         # Ask user what calculation they want, and print working
-        if another_calculation == "yes":
+        while another_calculation == "yes":
 
             # Loop headings in order for each calculation to solve
             for item in to_solve_list:
@@ -79,6 +75,16 @@ while another_problem == "yes":
                 print()
                 print(f"** {item} calculation here **\n")
 
+            another_calculation = string_checker("Would you like to calculate something else? (y/n): ", yes_no_list,
+                                                 "Please "
+                                                 "enter "
+                                                 "either "
+                                                 "yes / no")
+            if another_calculation == "no":
+                break
+
+            to_solve_list = []
+
             # Ask what they want to calculate next
             next_calculation = string_checker("What would you like to calculate? (d / m / g / e): ", dmge_list,
                                               "Please enter "
@@ -86,19 +92,7 @@ while another_problem == "yes":
                                               " midpoint / "
                                               "gradient / "
                                               "equation.")
-
-            # Call calculator function here to output working
-            print(f"** {next_calculation} calculation here **\n")
-
-        else:
-
-            another_calculation = "no"
-
-        another_calculation = string_checker("Would you like to calculate something else? (y/n): ", yes_no_list,
-                                             "Please "
-                                             "enter "
-                                             "either "
-                                             "yes / no")
+            to_solve_list.append(next_calculation)
 
     if to_solve == "all":
 
