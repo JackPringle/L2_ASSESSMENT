@@ -6,25 +6,25 @@ import math
 def calculator(x1, y1, x2, y2, to_solve):
     if "distance" in to_solve:
         ans = x1 + y1 + x2 + y2
-        working = f"{x1} + {y1} + {x2} + {y2}"
+        work = f"{x1} + {y1} + {x2} + {y2}"
 
     elif "midpoint" in to_solve:
         ans = x1 - y1 - x2 - y2
-        working = f"{x1} - {y1} - {x2} - {y2}"
+        work = f"{x1} - {y1} - {x2} - {y2}"
 
     elif "gradient" in to_solve:
         ans = "gradient answer here"
-        working = "working"
+        work = "working"
 
     elif "equation" in to_solve:
         ans = "equation answer here"
-        working = "working"
+        work = "working"
 
     else:
         ans = None
-        working = None
+        work = None
 
-    return ans, working
+    return ans, work
 
 
 # Main Routine...
@@ -46,11 +46,11 @@ if mode == "one":
 
     answer_and_working = calculator(x1_var, y1_var, x2_var, y2_var, to_solve_list[0])
     answer = answer_and_working[0]
-    work = answer_and_working[1]
+    working = answer_and_working[1]
 
     for item in to_solve_list:
         print(f"The answer is: {answer}")
-        print(f"The working is: {work}")
+        print(f"The working is: {working}")
         print()
 
 if mode == "all":
@@ -60,12 +60,14 @@ if mode == "all":
     # For all of dmge, break up the calculations by getting user to press <enter> to continue
     for item in dmge_list:
 
-        answer_and_working = calculator(x1_var, y1_var, x2_var, y2_var, dmge_list[0 + 1])
+        answer_and_working = calculator(x1_var, y1_var, x2_var, y2_var, item)
         answer = answer_and_working[0]
-        work = answer_and_working[1]
+        working = answer_and_working[1]
         input("Press <enter> to continue: ")
         print()
         print(f"** {item} calculation here **\n")
         print(f"Answer: {answer}")
-        print(f"Working: {work}")
+        print(f"Working: {working}")
         print()
+
+
