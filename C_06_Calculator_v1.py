@@ -3,14 +3,15 @@ import math
 
 # Functions...
 
-# Returns answer and working for a wanted calculation using the ordinates
+# Returns formula, working, and answer for a wanted calculation using the coordinates
 def calculator(x1, y1, x2, y2, to_solve):
+
     # Set variables so they can always be returned
     form = None
     ans = None
     work = None
 
-    # Calculate distance
+    # CALCULATE DISTANCE
     if "distance" in to_solve:
 
         # Formula string
@@ -26,10 +27,9 @@ D = √({x1} - {x2})² + ({y1} - {y2})²
   = √({x1 - x2})² + ({y1 - y2})²
   = √{math.pow((x1 - x2), 2)} + {math.pow((y1 - y2), 2)}
   = √{math.pow((x1 - x2), 2) + math.pow((y1 - y2), 2)}
-  = {math.sqrt(math.pow((x1 - x2), 2) + math.pow((y1 - y2), 2))}
-  '''
+  = {math.sqrt(math.pow((x1 - x2), 2) + math.pow((y1 - y2), 2))}'''
 
-    # Calculate midpoint
+    # CALCULATE MIDPOINT
     elif "midpoint" in to_solve:
 
         # Formula string
@@ -43,10 +43,9 @@ D = √({x1} - {x2})² + ({y1} - {y2})²
 
 M = (({x1} + {x2})/2), (({y1} + {y2})/2)
   = ({x1 + x2}/2), ({y1 + y2}/2)
-  = ({(x1 + x2)/2}), ({(y1 + y2)/2})
-  '''
+  = ({(x1 + x2)/2}), ({(y1 + y2)/2})'''
 
-    # Calculate gradient
+    # CALCULATE GRADIENT
     elif "gradient" in to_solve:
 
         # Formula string
@@ -60,10 +59,9 @@ M = (({x1} + {x2})/2), (({y1} + {y2})/2)
 
 G = ({y2} - {y1}) / ({x2} - {x1})
   = {y2 - y1} / {x2 - x1}
-  = {(y2 - y1) / (x2 - x1)}
-  '''
+  = {(y2 - y1) / (x2 - x1)}'''
 
-    # Calculate equation of the line
+    # CALCULATE EQUATION
     elif "equation" in to_solve:
 
         # Formula string
@@ -76,11 +74,14 @@ G = ({y2} - {y1}) / ({x2} - {x1})
         else:
             non_zero_point = x1, y1
 
-        # Answer string
+        # Calculate the gradient
         gradient = (y2 - y1) / (x2 - x1)
+
+        # If c is 0, don't include it in the answer
         if non_zero_point[1] - (gradient * non_zero_point[0]) == 0:
             ans = f"𝑦 = {gradient}𝑥"
 
+        # If c has a value, include it in the answer
         else:
             ans = f"𝑦 = {gradient}𝑥 + {non_zero_point[1] - (gradient * non_zero_point[0])}"
 
@@ -101,8 +102,7 @@ The point ({non_zero_point[0]}, {non_zero_point[1]}):
 {non_zero_point[1]} = {gradient * non_zero_point[0]} + 𝑐
 {non_zero_point[1] - (gradient * non_zero_point[0])} = 𝑐
 
-Finally, combine all variables to form the equation...
-'''
+Finally, combine all variables to form the equation...'''
 
     return form, ans, work
 
@@ -121,12 +121,13 @@ print(f'''({x1_var}, {y1_var})
 ({x2_var}, {y2_var})
 ''')
 
+#
 mode = input("What mode? (all or one): ")
 
 to_solve_list = []
 
 # Calculating during 'one by one' mode
-if mode == "one by one":
+while mode == "one":
 
     # Ask for the next calculation
     next_calculation = input("What would you like to calculate? ")
@@ -145,11 +146,23 @@ if mode == "one by one":
 
     # Print the answer and working separately
     for item in to_solve_list:
-        print(f"** {item} calculation here **\n")
+        # Print the answer and working separately
+        print("-" * 45)
+        print(f"{item.upper()}")
+        print(f"For line ({x1_var}, {y1_var}) to ({x2_var}, {y2_var}):")
+        print("-" * 45)
         print(formula)
-        print(f"Answer = {answer}")
         print(working)
+        print("-" * 20)
+        if item == "equation":
+            print(f"  {answer}")
+        else:
+            print(f"{item.upper()} = {answer}")
+        print("-" * 20)
         print()
+
+    # Reset the list so it doesn't reprint every equation
+    to_solve_list = []
 
 # Calculating during all mode
 if mode == "all":
