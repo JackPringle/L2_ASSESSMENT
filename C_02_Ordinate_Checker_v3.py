@@ -17,7 +17,7 @@ def ordinate_checker(the_ordinate):
             else:
 
                 # If ordinate is not an integer, return it as a string
-                return ordinate
+                return float(ordinate)
 
         # Ordinate is invalid if it's not a float
         except ValueError:
@@ -35,7 +35,7 @@ print("Enter the other end... (x,y)")
 x2 = ordinate_checker("X")
 y2 = ordinate_checker("Y")
 
-# If ordinates are equal to eachother, keep asking for ordinates
+# If ordinates are equal to each-other, keep asking for ordinates
 while x1 == x2 == y1 == y2:
     print("Error: Coordinates can not be equal!\n")
 
