@@ -1,7 +1,6 @@
 # Functions...
 
-# Ordinate Checker Function
-# Checks the ordinate entered by the user is a float
+# Checks the ordinate entered by the user is a float or integer
 def ordinate_checker(the_ordinate):
     while True:
 
@@ -16,7 +15,7 @@ def ordinate_checker(the_ordinate):
 
             else:
 
-                # If ordinate is not an integer, return it as a string
+                # If ordinate is not an integer, return it as a float
                 return float(ordinate)
 
         # Ordinate is invalid if it's not a float
