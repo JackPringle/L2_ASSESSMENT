@@ -82,7 +82,7 @@ D = √({x1} - {x2})² + ({y1} - {y2})²
 
 M = (({x1} + {x2})/2), (({y1} + {y2})/2)
   = ({rounder(x1 + x2)}/2), ({rounder(y1 + y2)}/2)
-  = ({rounder((x1 + x2) / 2)}), ({rounder((y1 + y2) / 2)})'''
+  = ({rounder((x1 + x2) / 2)}, {rounder((y1 + y2) / 2)})'''
 
     # CALCULATE GRADIENT
     elif "gradient" in to_solve:
@@ -90,15 +90,28 @@ M = (({x1} + {x2})/2), (({y1} + {y2})/2)
         # Formula string
         form = f"FORMULA = (𝑦₂ - 𝑦₁) / (𝑥₂ - 𝑥₁)"
 
-        # Answer float
-        ans = rounder((y2 - y1) / (x2 - x1))
+        try:
 
-        # Working string
-        work = f'''WORKING:
+            # Answer
+            ans = rounder((y2 - y1) / (x2 - x1))
 
-G = ({y2} - {y1}) / ({x2} - {x1})
-  = {rounder(y2 - y1)} / {rounder(x2 - x1)}
-  = {(y2 - y1) / (x2 - x1)}'''
+            # Working string
+            work = f'''WORKING:
+
+            G = ({y2} - {y1}) / ({x2} - {x1})
+              = {rounder(y2 - y1)} / {rounder(x2 - x1)}
+              = {(y2 - y1) / (x2 - x1)}'''
+
+        # If x1 and x2 are equal, we get a maths error
+        except ZeroDivisionError:
+
+            # Answer string
+            ans = "Undefined"
+
+            # Working string
+            work = '''In this case, the denominator equals to 0.
+It is not possible to divide a number by 0,
+Therefore....'''
 
     # CALCULATE EQUATION
     elif "equation" in to_solve:
@@ -113,29 +126,19 @@ G = ({y2} - {y1}) / ({x2} - {x1})
         else:
             non_zero_point = x1, y1
 
-        # Calculate the gradient
-        gradient = rounder((y2 - y1) / (x2 - x1))
+        try:
 
-        # If c is 0, don't include it in the answer
-        if non_zero_point[1] - (gradient * non_zero_point[0]) == 0:
-            ans = f"𝑦 = {gradient}𝑥"
+            # Calculate the gradient
+            gradient = rounder((y2 - y1) / (x2 - x1))
 
-        # If c is negative, output the equation with a negative sign (and remove the numbers original negative sign)
-        elif non_zero_point[1] - (gradient * non_zero_point[0]) < 0:
-            ans = f"𝑦 = {gradient}𝑥 - {rounder(int(non_zero_point[1] - (gradient * non_zero_point[0])))}"
-
-        # If c has a positive value, add it to the equation with a plus sign
-        else:
-            ans = f"𝑦 = {gradient}𝑥 + {rounder(non_zero_point[1] - (gradient * non_zero_point[0]))}"
-
-        # Working string
-        work = f'''WORKING:
+            # Working string
+            work = f'''WORKING:
 
 First, find gradient (𝑚).
 𝑚 = ({y2} - {y1}) / ({x2} - {x1})
   = {rounder(y2 - y1)} / {rounder(x2 - x1)}
   = {(y2 - y1) / (x2 - x1)}
-   
+
 Substitute 𝑚 into the equation.
 𝑦 = {gradient}𝑥 + 𝑐 
 
@@ -146,6 +149,29 @@ The point ({non_zero_point[0]}, {non_zero_point[1]}):
 {non_zero_point[1] - (gradient * non_zero_point[0])} = 𝑐
 
 Finally, combine all variables to form the equation...'''
+
+            # If c is 0, don't include it in the answer
+            if non_zero_point[1] - (gradient * non_zero_point[0]) == 0:
+                ans = f"𝑦 = {gradient}𝑥"
+
+            # If c is negative, output the equation with a negative sign (and remove the numbers original negative sign)
+            elif non_zero_point[1] - (gradient * non_zero_point[0]) < 0:
+                ans = f"𝑦 = {gradient}𝑥 - {rounder(non_zero_point[1] - (gradient * non_zero_point[0])) * -1}"
+
+            # If c has a positive value, add it to the equation with a plus sign
+            else:
+                ans = f"𝑦 = {gradient}𝑥 + {rounder(non_zero_point[1] - (gradient * non_zero_point[0]))}"
+
+        # If x1 and x2 are equal, we get a maths error
+        except ZeroDivisionError:
+
+            # Answer string
+            ans = "Undefined"
+
+            # Working string
+            work = '''In this case, the denominator equals to 0.
+It is not possible to divide a number by 0,
+Therefore the gradient is undefined.'''
 
     return form, ans, work
 
@@ -180,7 +206,7 @@ while True:
 
     # Get ordinate values, call ordinate checker
     x1_var = ordinate_checker("X1")
-    y1_var = ordinate_checker("Y2")
+    y1_var = ordinate_checker("Y1")
     x2_var = ordinate_checker("X2")
     y2_var = ordinate_checker("Y2")
 
@@ -196,6 +222,9 @@ while True:
     # Create the to solve list
     to_solve_list = []
 
+    # Set the list of what can be calculated
+    dmge_list = ["distance", "midpoint", "gradient", "equation"]
+
     # Calculating during 'one by one' mode
     while mode == "one":
 
@@ -203,7 +232,11 @@ while True:
         next_calculation = input("What would you like to calculate? ")
 
         # Add the response to the to solve list
-        to_solve_list.append(next_calculation)
+        if next_calculation in dmge_list:
+            to_solve_list.append(next_calculation)
+
+        else:
+            print("Not a valid option")
 
         # Call the calculator function, and use the to solve list
         answer_and_working = calculator(float(x1_var), float(y1_var), float(x2_var), float(y2_var), to_solve_list[0])
@@ -243,9 +276,6 @@ while True:
     # Calculating during all mode
     if mode == "all":
 
-        # Set the list of what needs to be calculated
-        dmge_list = ["distance", "midpoint", "gradient", "equation"]
-
         # For all each item in the list
         for item in dmge_list:
 
@@ -272,7 +302,7 @@ while True:
             print("-" * 20)
 
             # For equation calculations, output the answer differently
-            if item == "equation":
+            if item == "equation" and answer != "Undefined":
                 print(f"  {answer}")
 
             # Otherwise don't
