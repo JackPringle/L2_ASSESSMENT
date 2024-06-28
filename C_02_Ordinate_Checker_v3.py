@@ -25,19 +25,10 @@ def ordinate_checker(the_ordinate):
 
 # Main Routine...
 
-# Get ordinate values, call ordinate checker
-print("Enter the coordinates of an end point... (x,y)")
-x1 = ordinate_checker("X")
-y1 = ordinate_checker("Y")
-print()
-print("Enter the other end... (x,y)")
-x2 = ordinate_checker("X")
-y2 = ordinate_checker("Y")
+# Get coordinates
+while True:
 
-# If ordinates are equal to each-other, keep asking for ordinates
-while x1 == x2 == y1 == y2:
-    print("Error: Coordinates can not be equal!\n")
-
+    # Get ordinate values, call ordinate checker
     print("Enter the coordinates of an end point... (x,y)")
     x1 = ordinate_checker("X")
     y1 = ordinate_checker("Y")
@@ -45,6 +36,13 @@ while x1 == x2 == y1 == y2:
     print("Enter the other end... (x,y)")
     x2 = ordinate_checker("X")
     y2 = ordinate_checker("Y")
+
+    # If ordinates are equal to each-other, keep asking for ordinates
+    if x1 == x2 and y1 == y2:
+        print("Error: Coordinates can not be equal!\n")
+
+    else:
+        break
 
 # Print out the coordinates
 print()
