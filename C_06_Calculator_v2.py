@@ -61,7 +61,7 @@ def calculator(x1, y1, x2, y2, to_solve):
 
         # Working string
         work = f'''WORKING:
-        
+
 D = √({x1} - {x2})² + ({y1} - {y2})²     
   = √({rounder(x1 - x2)})² + ({rounder(y1 - y2)})²
   = √{rounder(math.pow((x1 - x2), 2))} + {rounder(math.pow((y1 - y2), 2))}
