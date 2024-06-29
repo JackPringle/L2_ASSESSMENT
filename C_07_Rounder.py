@@ -2,6 +2,7 @@
 
 # Gets calculated answer and rounds depending on float / integer
 def rounder(ans):
+
     # For integer answers, remove any trailing 0's from decimals
     if isinstance(ans, int) or ans.is_integer():
         ans = int(ans)
@@ -31,6 +32,9 @@ def rounder(ans):
 
         # Set it to a string, so any trailing 0's / decimal points can be removed
         ans = str(ans).rstrip('0').rstrip('.')
+
+        # Convert it back to a float so no string answers are returned
+        ans = float(ans)
 
     # If the rounded answer is -0, remove the negative sign
     if ans == -0 or ans == "-0":
