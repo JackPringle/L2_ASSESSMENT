@@ -4,6 +4,9 @@
 def int_checker(question, high):
     while True:
 
+        # Corresponding dmgea options
+        dmgea = {1: "distance", 2: "midpoint", 3: "gradient", 4: "equation", 5: "all"}
+
         # Get user response
         response = (input(question))
         error = "This must be an integer!\n"
@@ -15,11 +18,13 @@ def int_checker(question, high):
 
             # checks the valid range, if it's not then print an error
             if response < 1 or response > high:
-                error = "Please enter a valid option\n"
+                error = f"Please enter an integer from 1-{high}\n"
                 print(error)
 
             else:
-                return response
+
+                # Return the string value
+                return dmgea[response]
 
         # print the error if there is a value error
         except ValueError:
