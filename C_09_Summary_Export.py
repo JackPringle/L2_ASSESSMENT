@@ -71,13 +71,26 @@ S = {x1_var} - {y1_var} - {x2_var} - {y2_var}
   = {x1_var - y1_var} - {x2_var - y2_var}
   = {x1_var - y1_var - x2_var - y2_var}\n\n\n''')
 
-    # Add the data from the problem to the list
-    data.append([points, f"{name}\n\n", addition_working, subtraction_working])
+    # In base code, will need to add these to the lists from separate points
+    data.append(points)
+    data.append(f"{name}\n\n")
+    data.append(addition_working)
+    data.append(subtraction_working)
 
 # Calculation Summary
 
-# Add all data from session to the panda
-summary_frame = pd.DataFrame(data, columns=["Coordinates", "Question Name", "Addition", "Subtraction"])
+# Create DataFrame
+# Separate elements from the data list and assign them to the columns
+# If not done like this, the programme will break as it doesn't like the way we've added
+# things to the data list one by one
+summary_frame = pd.DataFrame(
+    {
+        "Coordinates": data[0::4],
+        "Question Name": data[1::4],
+        "Addition": data[2::4],
+        "Subtraction": data[3::4],
+    }
+)
 
 # Format the frame nicely and print
 table_formatting(summary_frame)
