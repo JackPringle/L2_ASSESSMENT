@@ -1,6 +1,8 @@
 import math
 from datetime import date
 import matplotlib.pyplot as plt
+import pandas as pd
+from prettytable import PrettyTable
 
 
 # Functions...
@@ -40,7 +42,6 @@ def not_blank(question):
 
 # Uses the coordinates to generate a line graph for visualisation
 def grapher(title, x1, y1, x2, y2):
-
     # Group the coordinates
     x_values_list = [x1, x2]
     y_values_list = [y1, y2]
@@ -326,15 +327,39 @@ def int_checker(question, high):
             print(error)
 
 
+# Formats the DataFrame
+def table_formatting(dataframe):
+    # Make the table using the pretty table library
+    table = PrettyTable()
+
+    # Add columns from the DataFrame
+    table.field_names = dataframe.columns.tolist()
+
+    # Add columns from the DataFrame
+    for _, row_var in dataframe.iterrows():
+        table.add_row(row_var.tolist())
+
+    # Align the columns differently
+    for col_var in ["Coordinates", "Question Name"]:
+        table.align[col_var] = 'c'
+
+    for col_var in ["Distance", "Midpoint", "Gradient", "Equation"]:
+        table.align[col_var] = 'l'
+
+    # Set style and border options
+    table.header_style = "upper"
+    table.horizontal_char = "_"
+    table.junction_char = "+"
+    table.vertical_char = "|"
+
+    # Print the table
+    print(table)
+
+
 # Main Routine...
 
-# Get the date
-today = date.today()
-
-# Get day, month and year as individual strings
-day = today.strftime("%d")
-month = today.strftime("%m")
-year = today.strftime("%Y")
+# Create a list for the calculation data to be stored in
+data = []
 
 # Heading
 print("*" * 45)
@@ -392,8 +417,11 @@ while another_problem == "yes":
         else:
             break
 
-    # Points string for pandas
+    # Points string for summary
     points = f"({x1_var}, {y1_var}) to ({x2_var}, {y2_var})"
+
+    # Remember these coordinates for the summary
+    data.append(points)
 
     # Define the coordinates for graphing
     x_values = [x1_var, x2_var]
@@ -411,21 +439,28 @@ while another_problem == "yes":
         print(f"***** {name} *****")
         print(f"The line {points}\n")
 
-        # Generate graph with name
-        grapher(f"{name}", x1_var, y1_var, x2_var, y2_var)
-
     # Otherwise, just use the line coordinates as the heading
     else:
+        name = None
         print("_" * 70)
         print(f"***** Line ({x1_var}, {y1_var}) to ({x2_var}, {y2_var}) *****\n\n")
 
-        # Generate graph with date as name
-        grapher(f"{day}.{month}.{year}", x1_var, y1_var, x2_var, y2_var)
+    # Remember the name (or "") for the summary
+    data.append(f"{name}\n\n")
+
+    want_graph = string_checker("Would you like a graph? (y/n): ", yes_no_list, "Please enter either "
+                                                                                "yes / no")
+
+    if want_graph == "yes":
+        print("\nPlease delete / save the graph to continue...")
+
+        # Generate graph with name
+        grapher(f"{name}", x1_var, y1_var, x2_var, y2_var)
 
     # FIRST CALCULATIONS
 
     # For first calculation, ask what they want to calculate (includes all mode option)
-    print("What would you like to calculate?")
+    print("\nWhat would you like to calculate?")
     initial_calculation_wanted = int_checker(
         "Distance [1], Midpoint [2], Gradient [3], Equation [4], or ALL [5]: ", 5)
 
@@ -456,10 +491,26 @@ while another_problem == "yes":
                 answer = answer_and_working[1]
                 working = answer_and_working[2]
 
+                # Combine the answer and working for the summary
+                summary_string = f"Answer = {answer} \n{working}\n\n\n"
+
+                # Add empty items to the data list
+                data = [points, name, "", "", "", ""]
+
                 # Print the answer and working separately
                 for item in to_solve_list:
 
                     number_of_calculations += 1
+
+                    # Add the string to the specific place in the data list depending on the calculation
+                    if "distance" in item:
+                        data[2] += summary_string
+                    elif "midpoint" in item:
+                        data[3] += summary_string
+                    if "gradient" in item:
+                        data[4] += summary_string
+                    elif "equation" in item:
+                        data[5] += summary_string
 
                     # Formatting
                     print()
@@ -532,6 +583,10 @@ while another_problem == "yes":
             answer = answer_and_working[1]
             working = answer_and_working[2]
 
+            # Remember the answer and working for the summary
+            summary_string = f"Answer = {answer} \n{working}\n\n\n"
+            data.append(summary_string)
+
             # Break up the calculations by getting user to press <enter> to continue
             print()
             input("Press <enter> to continue: ")
@@ -558,9 +613,65 @@ while another_problem == "yes":
             print("_" * 30)
             print()
 
+        print(data)
+
     # After they say 'no' to another calculation, ask if they want to solve another problem
     # If they choose yes, program will go back to the top of the main loop
     # If they choose no, program will end the main loop and start printing summaries
     another_problem = string_checker("Would you like to solve a different problem / line? (y/n): ", yes_no_list,
                                      "Please enter either "
                                      "yes / no")
+
+# CALCULATION SUMMARY
+
+# Get the date
+today = date.today()
+
+# Get day, month and year as individual strings
+day = today.strftime("%d")
+month = today.strftime("%m")
+year = today.strftime("%Y")
+
+# Heading
+print("\n\n")
+print("=" * 40)
+print("========= CALCULATION SUMMARY ==========")
+print("=" * 40)
+
+summary_frame = pd.DataFrame(
+    {
+        "Coordinates": data[0::6],
+        "Question Name": data[1::6],
+        "Distance": data[2::6],
+        "Midpoint": data[3::6],
+        "Gradient": data[4::6],
+        "Equation": data[5::6],
+    }
+)
+# Format the frame nicely and print
+table_formatting(summary_frame)
+
+# Create file to hold data (add .txt extension)
+file_name = f"Calculation Summary {day}_{month}_{year}.txt"
+
+# Create a text file for the user
+with open(file_name, "w+") as text_file:
+    # File heading
+    text_file.write("=" * 45 + "\n")
+    text_file.write("======= COORDINATE GEOMETRY SUMMARY =========" + "\n")
+    text_file.write("=" * 14 + f"   {day} {month} {year}    " + "=" * 14 + "\n")
+    text_file.write("=" * 45 + "\n\n")
+
+    # Add the rows to the text file
+    for index, row in summary_frame.iterrows():
+
+        # Write each row's data
+        for col, value in row.items():
+            text_file.write(f"{col}: {value}\n")
+
+        # Write problem separator
+        text_file.write("=" * 60 + "\n")
+
+
+# Close file
+text_file.close()
