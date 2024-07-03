@@ -3,7 +3,7 @@ from prettytable import PrettyTable
 from datetime import date
 
 
-# Formats the panda frame
+# Formats the DataFrame
 def table_formatting(dataframe):
 
     # Make the table using the pretty table library
@@ -13,15 +13,15 @@ def table_formatting(dataframe):
     table.field_names = dataframe.columns.tolist()
 
     # Add columns from the DataFrame
-    for _, row in dataframe.iterrows():
-        table.add_row(row.tolist())
+    for _, row_var in dataframe.iterrows():
+        table.add_row(row_var.tolist())
 
     # Align the columns differently
-    for col in ["Coordinates", "Question Name"]:
-        table.align[col] = 'c'
+    for col_var in ["Coordinates", "Question Name"]:
+        table.align[col_var] = 'c'
 
-    for col in ["Addition", "Subtraction"]:
-        table.align[col] = 'l'
+    for col_var in ["Addition", "Subtraction"]:
+        table.align[col_var] = 'l'
 
     # Set style and border options
     table.header_style = "upper"
@@ -40,8 +40,7 @@ def table_formatting(dataframe):
 data = []
 
 # Loop for testing
-for item in range(0, 1):
-
+for item in range(0, 2):
     # Get coordinates
     x1_var = float(input("X1: "))
     y1_var = float(input("Y1: "))
@@ -58,33 +57,22 @@ for item in range(0, 1):
     addition = x1_var + x2_var + y1_var + y2_var
     subtraction = x1_var - x2_var - y1_var - y2_var
 
-    # Addition answer
-    addition_answer = f"Addition = {addition}"
+    # Addition print string
+    addition_working = (f'''Answer = {addition}
+WORKING:
+A = {x1_var} + {y1_var} + {x2_var} + {y2_var}
+  = {x1_var + y1_var} + {x2_var + y2_var}
+  = {x1_var + y1_var + x2_var + y2_var}\n\n\n''')
 
-    # Addition working
-    addition_working = (f'''Addition working here...
-..................
-...................
-...................
-....................''')
-
-    # Subtraction answer
-    subtraction_answer = f"Subtraction = {subtraction}"
-
-    # Subtraction working
-    subtraction_working = (f'''Subtraction working here...
-..................
-...................
-...................
-....................''')
-
-    # Combine the answer and working
-    addition_print = f"{addition_answer}\n\n{addition_working}"
-    subtraction_print = f"{subtraction_answer}\n\n{subtraction_working}"
+    # Subtraction print string
+    subtraction_working = (f'''Answer = {subtraction}
+WORKING:
+S = {x1_var} - {y1_var} - {x2_var} - {y2_var}
+  = {x1_var - y1_var} - {x2_var - y2_var}
+  = {x1_var - y1_var - x2_var - y2_var}\n\n\n''')
 
     # Add the data from the problem to the list
-    data.append([points, name, addition_print, subtraction_print])
-
+    data.append([points, f"{name}\n\n", addition_working, subtraction_working])
 
 # Calculation Summary
 
@@ -104,13 +92,26 @@ year = today.strftime("%Y")
 
 # Write to file...
 # Create file to hold data (add .txt extension)
-file_name = f"Calculation Summary {day} {month} {year}.txt"
-text_file = open(file_name, "w+")
+file_name = f"Calculation Summary {day}_{month}_{year}.txt"
 
-# Heading
-for item in summary_frame:
-    text_file.write(item)
-    text_file.write("\n\n")
+# Open file for writing
+with open(file_name, "w+") as text_file:
+
+    # File heading
+    text_file.write("=" * 45 + "\n")
+    text_file.write("======= COORDINATE GEOMETRY SUMMARY =========" + "\n")
+    text_file.write("=" * 14 + f"   {day} {month} {year}    " + "=" * 14 + "\n")
+    text_file.write("=" * 45 + "\n\n")
+
+    # Add the rows to the text file
+    for index, row in summary_frame.iterrows():
+
+        # Write each row's data
+        for col, value in row.items():
+            text_file.write(f"{col}: {value}\n")
+
+        # Write problem separator
+        text_file.write("=" * 45 + "\n")
 
 # Close file
 text_file.close()
