@@ -27,6 +27,36 @@ def string_checker(question, valid_list, error):
         print()
 
 
+# Includes the instructions for the calculator
+def instructions():
+
+    print('''***** INSTRUCTIONS *****
+
+Start by entering two coordinates
+
+Feel free to enter a name for the problem so you can associate it with a
+maths book question, e.g. "Page 8, question (a)".
+
+For a visual understanding of the line, you may generate a line graph.
+This graph can be saved to file if needed.
+
+For the first calculation of a line, you can choose to calculate "one by one",
+or calculate "all" in one go.
+
+Formulas, step-by-step workings, and answers will be provided for each calculation!
+You will get both the unrounded answers, and final answers rounded to 3dp.
+
+Complete as many specific calculations for as many lines / problems you want!
+
+Once ou are done, you will get a summary of all the lines and calculations you made.
+A text file of this summary will also be generated to your files for you to save 
+for revision :)
+
+Let the calculations begin!!!
+
+''')
+
+
 # Checks that the user response is not blank
 def not_blank(question):
     while True:
@@ -358,16 +388,8 @@ def table_formatting(dataframe):
 
 # Main Routine...
 
-# Create a list for the calculation data to be stored in
+# Create a list for the calculation data to be stored in for the end summary
 data = []
-
-# Heading
-print("*" * 45)
-print("****** COORDINATE GEOMETRY CALCULATOR *******")
-print("*" * 45)
-print()
-print("_" * 45)
-print("INSTRUCTIONS GO HERE!")
 
 # Lists of valid responses
 yes_no_list = ["yes", "no"]
@@ -376,6 +398,22 @@ dmge_list = ["distance", "midpoint", "gradient", "equation"]
 # Set tally values
 number_of_problems = 0
 number_of_calculations = 0
+
+# Heading
+print("=" * 45)
+print("====== COORDINATE GEOMETRY CALCULATOR =======")
+print("=" * 45)
+print()
+print("_" * 45)
+
+# Ask user if they want instructions
+want_instructions = string_checker("Would you like instructions? (y/n): ", yes_no_list, "Please enter either yes "
+                                                                                        "/ no")
+
+# Print the instructions
+if want_instructions == "yes":
+    print()
+    instructions()
 
 # Start loop
 another_problem = "yes"
@@ -445,7 +483,7 @@ while another_problem == "yes":
         print("_" * 70)
         print(f"***** Line ({x1_var}, {y1_var}) to ({x2_var}, {y2_var}) *****\n\n")
 
-    # Remember the name (or "") for the summary
+    # Remember the name (or None) for the summary
     data.append(f"{name}\n\n")
 
     want_graph = string_checker("Would you like a graph? (y/n): ", yes_no_list, "Please enter either "
@@ -477,6 +515,11 @@ while another_problem == "yes":
     # If they didn't request 'all' calculations for the problem
     if mode == "one by one":
 
+        first_append = ""
+        second_append = ""
+        third_append = ""
+        fourth_append = ""
+
         # Loop for each calculation
         while another_calculation == "yes":
 
@@ -491,47 +534,43 @@ while another_problem == "yes":
                 answer = answer_and_working[1]
                 working = answer_and_working[2]
 
-                # Combine the answer and working for the summary
-                summary_string = f"Answer = {answer} \n{working}\n\n\n"
+                # Organise the strings within the loop so that they append in the correct order for pandas
+                # This took me hours to come up with :(
+                if to_solve_list[0] == "distance":
+                    distance_string = f"Answer = {answer} \n{working}\n\n\n"
+                    first_append = distance_string
+                elif to_solve_list[0] == "midpoint":
+                    midpoint_string = f"Answer = {answer} \n{working}\n\n\n"
+                    second_append = midpoint_string
+                elif to_solve_list[0] == "gradient":
+                    gradient_string = f"Answer = {answer} \n{working}\n\n\n"
+                    third_append = gradient_string
+                elif to_solve_list[0] == "equation":
+                    equation_string = f"Answer = {answer} \n{working}\n\n\n"
+                    fourth_append = equation_string
 
-                # Add empty items to the data list
-                data = [points, name, "", "", "", ""]
+                number_of_calculations += 1
 
-                # Print the answer and working separately
-                for item in to_solve_list:
+                # Formatting
+                print()
+                print("_" * 70)
+                print(f"{to_solve_list[0].upper()}")
+                print(f"For line {points}:")
+                print("_" * 70)
+                print(formula)
+                print(working)
+                print("_" * 30)
 
-                    number_of_calculations += 1
+                # For equation calculations, output the answer differently
+                if to_solve_list[0] == "equation":
+                    print(f"  {answer}")
 
-                    # Add the string to the specific place in the data list depending on the calculation
-                    if "distance" in item:
-                        data[2] += summary_string
-                    elif "midpoint" in item:
-                        data[3] += summary_string
-                    if "gradient" in item:
-                        data[4] += summary_string
-                    elif "equation" in item:
-                        data[5] += summary_string
+                # Otherwise don't
+                else:
+                    print(f"{to_solve_list[0].upper()} = {answer}")
 
-                    # Formatting
-                    print()
-                    print("_" * 70)
-                    print(f"{item.upper()}")
-                    print(f"For line {points}:")
-                    print("_" * 70)
-                    print(formula)
-                    print(working)
-                    print("_" * 30)
-
-                    # For equation calculations, output the answer differently
-                    if item == "equation":
-                        print(f"  {answer}")
-
-                    # Otherwise don't
-                    else:
-                        print(f"{item.upper()} = {answer}")
-
-                    print("_" * 30)
-                    print()
+                print("_" * 30)
+                print()
 
             # After printing the last calculation wanted, ask if they'd like another one
             another_calculation = string_checker("Would you like to calculate something else? (y/n): ", yes_no_list,
@@ -562,6 +601,12 @@ while another_problem == "yes":
             else:
                 already_calculated.append(next_calculation)
                 to_solve_list.append(next_calculation)
+
+        # Once the line / problem is finished, append the items in the sort order so they format to pandas correctly
+        data.append(first_append)
+        data.append(second_append)
+        data.append(third_append)
+        data.append(fourth_append)
 
     # If they want 'all' calculations for the problem
     if mode == "all":
@@ -671,7 +716,6 @@ with open(file_name, "w+") as text_file:
 
         # Write problem separator
         text_file.write("=" * 60 + "\n")
-
 
 # Close file
 text_file.close()
