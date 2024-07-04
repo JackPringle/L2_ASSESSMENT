@@ -29,7 +29,6 @@ def string_checker(question, valid_list, error):
 
 # Includes the instructions for the calculator
 def instructions():
-
     print('''***** INSTRUCTIONS *****
 
 Start by entering two coordinates
@@ -698,13 +697,12 @@ table_formatting(summary_frame)
 print("\nThe calculation summary has been sent to your files\n")
 print("Thankyou for using Coordinate Geometry Calculator by Jack Pringle!")
 
-
-
 # Create file to hold data (add .txt extension)
 file_name = f"Calculation Summary {day}_{month}_{year}.txt"
 
 # Create a text file for the user
-with open(file_name, "w+") as text_file:
+# Specify the encoding otherwise special characters in the working won't print
+with open(file_name, "w+",  encoding='utf-8') as text_file:
     # File heading
     text_file.write("=" * 45 + "\n")
     text_file.write("======= COORDINATE GEOMETRY SUMMARY =========" + "\n")
