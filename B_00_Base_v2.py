@@ -658,8 +658,6 @@ while another_problem == "yes":
             print("_" * 30)
             print()
 
-        print(data)
-
     # After they say 'no' to another calculation, ask if they want to solve another problem
     # If they choose yes, program will go back to the top of the main loop
     # If they choose no, program will end the main loop and start printing summaries
@@ -695,6 +693,12 @@ summary_frame = pd.DataFrame(
 )
 # Format the frame nicely and print
 table_formatting(summary_frame)
+
+# Thank the user
+print("\nThe calculation summary has been sent to your files\n")
+print("Thankyou for using Coordinate Geometry Calculator by Jack Pringle!")
+
+
 
 # Create file to hold data (add .txt extension)
 file_name = f"Calculation Summary {day}_{month}_{year}.txt"
