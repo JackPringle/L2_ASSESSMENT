@@ -47,7 +47,7 @@ You will get both the unrounded answers, and final answers rounded to 3dp.
 
 Complete as many specific calculations for as many lines / problems you want!
 
-Once ou are done, you will get a summary of all the lines and calculations you made.
+Once you are done, you will get a summary of all the lines and calculations you made.
 A text file of this summary will also be generated to your files for you to save 
 for revision :)
 
@@ -71,6 +71,7 @@ def not_blank(question):
 
 # Uses the coordinates to generate a line graph for visualisation
 def grapher(title, x1, y1, x2, y2):
+
     # Group the coordinates
     x_values_list = [x1, x2]
     y_values_list = [y1, y2]
@@ -213,7 +214,7 @@ G = ({y2} - {y1}) / ({x2} - {x1})
             # Working string
             work = '''In this case, the denominator equals to 0.
 It is not possible to divide a number by 0,
-Therefore....'''
+therefore gradient is undefined.'''
 
     # CALCULATE EQUATION
     elif "equation" in to_solve:
@@ -296,7 +297,7 @@ Finally, combine all variables to form the equation...'''
 
             # Working string
             work = '''An undefined gradient means the line is vertical.
-Therefore the equation is in terms of x, rather than y...'''
+Therefore the equation is in terms of x, rather than y.'''
 
     # Return the values
     return form, ans, work
@@ -322,7 +323,7 @@ def ordinate_checker(the_ordinate):
 
         # Ordinate is invalid if it's not a float
         except ValueError:
-            print("The ordinate must be a float.\n")
+            print("The ordinate must be a number\n")
 
 
 # Checks user response to next_calc question is valid
@@ -394,7 +395,7 @@ data = []
 yes_no_list = ["yes", "no"]
 dmge_list = ["distance", "midpoint", "gradient", "equation"]
 
-# Set tally values
+# Set tally values for summary
 number_of_problems = 0
 number_of_calculations = 0
 
@@ -411,7 +412,7 @@ want_instructions = string_checker("Would you like instructions? (y/n): ", yes_n
 
 # Print the instructions
 if want_instructions == "yes":
-    print()
+    print("_" * 45)
     instructions()
 
 # Start loop
@@ -445,13 +446,14 @@ while another_problem == "yes":
         print("Enter the other end... (x,y)")
         x2_var = ordinate_checker("X")
         y2_var = ordinate_checker("Y")
-        print("_" * 70)
 
         # If ordinates are equal to each-other, keep asking for ordinates
         if x1_var == x2_var and y1_var == y2_var:
-            print("Error: Coordinates can not be equal!\n")
+            print("Error! Coordinates can not be equal.")
 
         else:
+
+            # Move on once the user enters 4 valid ordinates
             break
 
     # Points string for summary
@@ -460,11 +462,8 @@ while another_problem == "yes":
     # Remember these coordinates for the summary
     data.append(points)
 
-    # Define the coordinates for graphing
-    x_values = [x1_var, x2_var]
-    y_values = [y1_var, y2_var]
-
     # Ask user if they want to assign a name to the given problem
+    print("_" * 70)
     want_name = string_checker("Would you like to assign a name to this question? (y/n): ", yes_no_list,
                                "Please enter either "
                                "yes / no")
@@ -476,20 +475,24 @@ while another_problem == "yes":
         print(f"***** {name} *****")
         print(f"The line {points}\n")
 
-    # Otherwise, just use the line coordinates as the heading
+    # Otherwise, name set name to none
     else:
         name = None
         print("_" * 70)
-        print(f"***** Line ({x1_var}, {y1_var}) to ({x2_var}, {y2_var}) *****\n\n")
+        print(f"***** Line {points} *****\n\n")
 
     # Remember the name (or None) for the summary
     data.append(f"{name}\n\n")
 
+    # Ask user if they want a graph for the problem
     want_graph = string_checker("Would you like a graph? (y/n): ", yes_no_list, "Please enter either "
                                                                                 "yes / no")
 
+    # Generate graph
     if want_graph == "yes":
-        print("\nPlease delete / save the graph to continue...")
+
+        # The next line of print statement won't appear until they exit the graph
+        print("\nPlease delete / save the graph to continue...\n")
 
         # Generate graph with name
         grapher(f"{name}", x1_var, y1_var, x2_var, y2_var)
@@ -497,7 +500,7 @@ while another_problem == "yes":
     # FIRST CALCULATIONS
 
     # For first calculation, ask what they want to calculate (includes all mode option)
-    print("\nWhat would you like to calculate?")
+    print("What would you like to calculate?")
     initial_calculation_wanted = int_checker(
         "Distance [1], Midpoint [2], Gradient [3], Equation [4], or ALL [5]: ", 5)
 
@@ -511,9 +514,10 @@ while another_problem == "yes":
         to_solve_list.append(initial_calculation_wanted)
         mode = "one by one"
 
-    # If they didn't request 'all' calculations for the problem
+    # For single calculations at a time
     if mode == "one by one":
 
+        # Define the append variables
         first_append = ""
         second_append = ""
         third_append = ""
@@ -522,10 +526,12 @@ while another_problem == "yes":
         # Loop for each calculation
         while another_calculation == "yes":
 
+            number_of_calculations += 1
+
             # If there's an item to solve, call the calculator function
             if to_solve_list:
 
-                # Call the calculator function, and use the to solve list
+                # Calculate the answer wanted, call calculator function
                 answer_and_working = calculator(x1_var, y1_var, x2_var, y2_var, to_solve_list[0])
 
                 # Separate the formula, answer and working
@@ -533,8 +539,8 @@ while another_problem == "yes":
                 answer = answer_and_working[1]
                 working = answer_and_working[2]
 
-                # Organise the strings within the loop so that they append in the correct order for pandas
-                # This took me hours to come up with :(
+                # Organises the strings within the loop so that they append in the correct order for pandas
+                # This took me hours to get to :(
                 if to_solve_list[0] == "distance":
                     distance_string = f"Answer = {answer} \n{working}\n\n\n"
                     first_append = distance_string
@@ -545,12 +551,10 @@ while another_problem == "yes":
                     gradient_string = f"Answer = {answer} \n{working}\n\n\n"
                     third_append = gradient_string
                 elif to_solve_list[0] == "equation":
-                    equation_string = f"Answer = {answer} \n{working}\n\n\n"
+                    equation_string = f"Answer: {answer} \n{working}\n\n\n"
                     fourth_append = equation_string
 
-                number_of_calculations += 1
-
-                # Formatting
+                # Format the answers and working
                 print()
                 print("_" * 70)
                 print(f"{to_solve_list[0].upper()}")
@@ -564,7 +568,7 @@ while another_problem == "yes":
                 if to_solve_list[0] == "equation":
                     print(f"  {answer}")
 
-                # Otherwise don't
+                # Format normally for all other calculations
                 else:
                     print(f"{to_solve_list[0].upper()} = {answer}")
 
@@ -578,11 +582,11 @@ while another_problem == "yes":
                                                  "either "
                                                  "yes / no")
 
-            # If they don't, break out, they will then be asked if they want another line/problem
+            # If they don't, break out the loop, they will then be asked if they want another line/problem
             if another_calculation == "no":
                 break
 
-            # Reset the list so it doesn't reprint every equation
+            # Reset the list so it doesn't reprint every calculation
             to_solve_list = []
 
             # Ask what they want to calculate next (does not include all mode this time since it's not the first
@@ -601,7 +605,7 @@ while another_problem == "yes":
                 already_calculated.append(next_calculation)
                 to_solve_list.append(next_calculation)
 
-        # Once the line / problem is finished, append the items in the sort order so they format to pandas correctly
+        # Once the line / problem is finished, append the items in the sort order, so they format to pandas correctly
         data.append(first_append)
         data.append(second_append)
         data.append(third_append)
@@ -612,9 +616,10 @@ while another_problem == "yes":
 
         # Heading
         print("_" * 70)
+        print()
         print("**** ALL MODE ****\n")
 
-        # For all each item in the list
+        # For each calculation needed to be made
         for item in dmge_list:
 
             number_of_calculations += 1
@@ -632,12 +637,11 @@ while another_problem == "yes":
             data.append(summary_string)
 
             # Break up the calculations by getting user to press <enter> to continue
-            print()
-            input("Press <enter> to continue: ")
+            input("\nPress <enter> to continue: ")
             print()
             print()
 
-            # Formatting
+            # Format the answer and working
             print("_" * 70)
             print(f"{item.upper()}")
             print(f"For line {points}:")
@@ -680,6 +684,8 @@ print("=" * 40)
 print("========= CALCULATION SUMMARY ==========")
 print("=" * 40)
 
+# Create the DataFrame using a dictionary
+# Retrieve the data collected from the session and assign them to the columns
 summary_frame = pd.DataFrame(
     {
         "Coordinates": data[0::6],
@@ -690,11 +696,16 @@ summary_frame = pd.DataFrame(
         "Equation": data[5::6],
     }
 )
+
 # Format the frame nicely and print
 table_formatting(summary_frame)
 
+# Other stats
+print(f"- You made {number_of_calculations} calculations in total")
+print(f"- You made calculations for {number_of_problems} problems / lines\n")
+
 # Thank the user
-print("\nThe calculation summary has been sent to your files\n")
+print("** The calculation summary has been sent to your files **\n")
 print("Thankyou for using Coordinate Geometry Calculator by Jack Pringle!")
 
 # Create file to hold data (add .txt extension)
@@ -703,13 +714,14 @@ file_name = f"Calculation Summary {day}_{month}_{year}.txt"
 # Create a text file for the user
 # Specify the encoding otherwise special characters in the working won't print
 with open(file_name, "w+",  encoding='utf-8') as text_file:
+
     # File heading
     text_file.write("=" * 45 + "\n")
     text_file.write("======= COORDINATE GEOMETRY SUMMARY =========" + "\n")
     text_file.write("=" * 14 + f"   {day} {month} {year}    " + "=" * 14 + "\n")
     text_file.write("=" * 45 + "\n\n")
 
-    # Add the rows to the text file
+    # Add the lines to the text file
     for index, row in summary_frame.iterrows():
 
         # Write each row's data
